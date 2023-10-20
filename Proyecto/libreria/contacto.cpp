@@ -15,7 +15,7 @@ sContacto* resizeContactos(sContacto* miLista, u_int tam, u_int nuevoTam) {
     }
 
     return nullptr;
-}
+}//esta funcion no funca:: q hacemo?
 
 void resizeContactos(sContacto** miLista, u_int tam, u_int nuevoTam) {
     sContacto* aux = new sContacto[nuevoTam];

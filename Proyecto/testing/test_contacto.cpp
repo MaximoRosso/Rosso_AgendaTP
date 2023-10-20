@@ -10,7 +10,7 @@ const sContacto DefaultContactos[3] = {
 TEST_CASE("Resize Array Contactos") {
     sContacto* MisContactos = new sContacto[3];
 
-    REQUIRE(MisContactos != nullptr);
+    REQUIRE(MisContactos != nullptr);//!!!!!!!!!! hay un error aca--> bad_alloc-->no estaria encontrando memoria?
 
     for(u_int i = 0; i < 3; i++)
         MisContactos[i] = DefaultContactos[i];
@@ -37,4 +37,5 @@ TEST_CASE("Resize Array Contactos") {
         CHECK(ViejaDireccion != MisContactos);
     }
 
+    delete[] MisContactos;
 }

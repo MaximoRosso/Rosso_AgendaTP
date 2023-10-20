@@ -8,20 +8,9 @@ bool hayEspacio(sAgenda* miAgenda) {
  * @brief Función agregar contacto a la agenda
  * @return Error: ErrAgrEspacio, sino ExitoAgregar
  */
-/*eAgrContacto agregarContacto(sAgenda* miAgenda, sContacto miContacto) {
+eAgrContacto agregarContacto(sAgenda* miAgenda, sContacto miContacto) {
     if (!hayEspacio(miAgenda))
         return eAgrContacto::ErrAgrEspacio;
-
-    miAgenda->CantContactos++;
-    miAgenda->misContactos[miAgenda->CantContactos - 1] = miContacto;
-    // miAgenda->*(misContactos + i )
-    return eAgrContacto::ExitoAgregar;
-}*/
-
-eAgrContacto agregarContacto(sAgenda* miAgenda, sContacto miContacto) {
-    if (!hayEspacio(miAgenda)) {
-
-    }
 
     miAgenda->CantContactos++;
     miAgenda->misContactos[miAgenda->CantContactos - 1] = miContacto;
@@ -44,7 +33,7 @@ eUpdContacto actualizarContacto(sAgenda* miAgenda, sContacto miContacto) {
         }
         if (aux == ultimo)
             break;
-        aux++; // aux = aux + 1 o aux+= 1
+        aux++;
     }
     return eUpdContacto::ErrUpdContacto;
 }
@@ -53,7 +42,7 @@ eUpdContacto actualizarContacto(sAgenda* miAgenda, sContacto miContacto) {
  * @return Error: ErrUpdContacto, ErrUpdIndex, sino ExitoModificar
  */
 eUpdContacto actualizarContacto(sAgenda* miAgenda, u_int indexContacto, sContacto miContacto) {
-    if (indexContacto >= miAgenda->CantMaxima)
+    if (indexContacto >= miAgenda->CantMaxima)//el indice pasado esta fuera del rango de la cant de contactos
         return eUpdContacto::ErrUpdIndex;
 
     sContacto* aux = miAgenda->misContactos + indexContacto;
@@ -117,6 +106,22 @@ eRmContacto removerContacto(sAgenda* miAgenda, u_int indexContacto) {
     return eRmContacto::ExitoRemover;
 }
 
+eRmContacto removerContacto(sAgenda* miAgenda, eGrupo grupoContacto) {//ESTA ES LA REMOVER POR GRUPO
+
+    sContacto* aux = miAgenda->misContactos,
+        * ultimo = (miAgenda->misContactos) + miAgenda->CantContactos - 1;// sirve para saber cuantos son porque con esto tengo apuntada la 1era pos y la ultima
+
+    while(true) {
+        if (aux->Grupo == grupoContacto) {//busco el contacto que tenga el mismo grupo que el pasado a la funcion
+            *aux = ContactoNulo;
+            return eRmContacto::ExitoRemover;
+        }
+        if (aux == ultimo)
+            break;
+        aux++;
+    }
+    return eRmContacto::ErrRmGrupo;
+}
 /**
  * @brief Función de buscar contacto por Nombre Y Apellido o email
  * @return Error: Nullptr, sino Contacto
@@ -140,7 +145,7 @@ sContacto buscarContacto(sAgenda* miAgenda, str valorBusqueda) {
  * @return Error: Nullptr, sino Contacto
  */
 sContacto buscarContacto(sAgenda* miAgenda, u_int indexContacto) {
-    return indexContacto >= miAgenda->CantContactos - 1 ? ContactoNulo : miAgenda->misContactos[indexContacto];
+    return indexContacto >= miAgenda->CantContactos - 1 ? ContactoNulo : miAgenda->misContactos[indexContacto];//LO HAGO DIRECTAMENTE TODO EN UNA LINEA CON EL IF TERNARIO
 }
 
 void OrdenarPorApellido(sAgenda* miAgenda) {
@@ -186,10 +191,45 @@ void ListarPorGrupo(sAgenda miAgenda, sAgrupar*& Agrupados) {
             }
         }
     }
+    delete Agrupados;
 }
 
+//IMPRIMIR POR GRUPO REQUERIDO//
+ePrContacto imprimirGrupo(sAgenda *miAgenda, eGrupo Grupo){
+    sContacto* aux = miAgenda->misContactos,
+        * ultimo = (miAgenda->misContactos) + miAgenda->CantContactos - 1;
+    while(true){
+        if(aux->Grupo == Grupo){//busco los que pertenezcan al grupo que se busca imprimir
+            std::cout<< miAgenda->misContactos->Nombre<< miAgenda->misContactos->Apellido<<std::endl;//imprimo sus datos
+            return ePrContacto :: ExitoPrint;//devuelvo que se pudo imprimir
+        }
+        if(aux == ultimo)
+            return ePrContacto :: ErrPrContacto;// no se encontro nadie para imprimir
+        aux++;//incremento para avanzar de direccion de memoria
+    }
+}
 
+ePrContacto imprimirGrupo(sAgenda *miAgenda){
+    sContacto* aux = miAgenda->misContactos,
+        * ultimo = (miAgenda->misContactos) + miAgenda->CantContactos - 1;
+    int i ,contador;
+    i=contador=0;
+    while(true){
 
+        if(aux->Grupo == i){
+            std::cout<< miAgenda->misContactos->Nombre<< miAgenda->misContactos->Apellido<<std::endl;//imprimo sus datos
+            contador++;//cuento que imprimio
+            return ePrContacto :: ExitoPrint;//devuelvo que se pudo imprimir
+            if(aux == ultimo){// si llegue al final
+                aux=miAgenda->misContactos;//vuelvo a la cabeza
+                i++;// cambio de grupo
+            }
+        }
+        if(contador == 0)//no imprimio nunca a nadie
+            return ePrContacto :: ErrPrContacto;// no se imprimio
+    }
+
+}
 
 
 

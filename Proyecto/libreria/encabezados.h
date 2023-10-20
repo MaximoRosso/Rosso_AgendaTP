@@ -2,6 +2,7 @@
 #define ENCABEZADOS_H
 
 #include <string>
+#include <iostream>
 
 #define BLK 6
 
