@@ -97,7 +97,7 @@ TEST_CASE("Agenda Eliminacion") {
         REQUIRE(res == eRmContacto::ExitoRemover);
     }
 
-    SECTION("Eliminando por Grupo"){
+    SECTION("Eliminando por Grupo"){//test pasado
         eRmContacto res = removerContacto( miAgenda, eGrupo ::AMIGO);
         REQUIRE(res == eRmContacto::ExitoRemover);
     }
